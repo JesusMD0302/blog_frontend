@@ -1,95 +1,82 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+/* eslint-disable @next/next/no-img-element */
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Fab,
+  Typography,
+  useTheme,
+} from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
+import { useToggle } from "@/hooks/useToggle";
+import NewPostDialog from "@/components/Post/PostFormDialog";
+import PostsContainer from "@/components/Post/PostsContainer";
+import PostCard from "@/components/Post/PostCard";
+import { useSession } from "next-auth/react";
+import useApi from "@/hooks/useApi";
 
 export default function Home() {
+  const [newPostOpen, _, setNewPostClose, setNewPostOpen] = useToggle();
+  const theme = useTheme();
+  const { data } = useSession();
+  const { data: posts, error, loading } = useApi<Post[]>("/posts/all");
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box component="main">
+      <Container maxWidth="sm" sx={{ pb: 2 }}>
+        <Box
+          component="section"
+          display={{ xs: "none", sm: "flex" }}
+          justifyContent={{ xs: "center", sm: "space-between" }}
+          alignItems="center"
+          mt={2}
+          gap={1}
+        >
+          <Typography
+            variant="h5"
+            component="h1"
+            sx={{
+              fontWeight: "bold",
+              color: theme.palette.primary.main,
+            }}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            Publicaciones
+          </Typography>
+          {data && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={setNewPostOpen}
+            >
+              Nueva publicación
+            </Button>
+          )}
+        </Box>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <PostsContainer>
+          {posts &&
+            posts.map((post, index) => <PostCard key={index} {...post} />)}
+        </PostsContainer>
+      </Container>
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{
+          display: { xs: "flex", sm: "none" },
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+        }}
+        onClick={setNewPostOpen}
+      >
+        <AddIcon />
+      </Fab>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      <NewPostDialog isOpen={newPostOpen} handleClose={setNewPostClose} />
+    </Box>
   );
 }
