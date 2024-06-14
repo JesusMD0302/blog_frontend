@@ -132,7 +132,7 @@ export default function SignUpForm() {
             label="Contraseña"
             id="password"
             name="password"
-            type="text"
+            type="password"
             placeholder="Ingresa tu contraseña"
             fullWidth
             InputLabelProps={{
