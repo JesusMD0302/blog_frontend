@@ -62,19 +62,22 @@ export default function Home() {
             posts.map((post, index) => <PostCard key={index} {...post} />)}
         </PostsContainer>
       </Container>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{
-          display: { xs: "flex", sm: "none" },
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-        }}
-        onClick={setNewPostOpen}
-      >
-        <AddIcon />
-      </Fab>
+
+      {data && (
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{
+            display: { xs: "flex", sm: "none" },
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+          }}
+          onClick={setNewPostOpen}
+        >
+          <AddIcon />
+        </Fab>
+      )}
 
       <NewPostDialog isOpen={newPostOpen} handleClose={setNewPostClose} />
     </Box>
