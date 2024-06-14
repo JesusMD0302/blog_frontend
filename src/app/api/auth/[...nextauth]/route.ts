@@ -57,7 +57,6 @@ const handler = NextAuth({
       const { token, user } = params;
 
       if (user) {
-        console.log("jwt", token, user);
         token.accessToken = (user as any).token;
         (token as any).id = (user as any).id;
         (token as any).name = (user as any).username;

@@ -37,7 +37,6 @@ export default function UploadImagesInput({
   const [imagesCount, setImagesCount] = useState<number | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("hola");
     const { files } = event.target;
 
     if (files) {
