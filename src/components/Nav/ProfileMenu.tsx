@@ -23,7 +23,7 @@ export default function ProfileMenu() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isLoading, _, setIsLoadingFalse] = useToggle(true);
 
-  const { data } = useSession();
+  const { data, status } = useSession();
   const path = usePathname();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,9 +43,9 @@ export default function ProfileMenu() {
     setIsLoadingFalse();
   }, [setIsLoadingFalse]);
 
-  if (isLoading || path === "/auth/login") return null;
+  if (status === "loading") return null;
 
-  if (!isLoading && !data)
+  if (status === "unauthenticated")
     return (
       <Box component="section">
         <Link href="/auth/login" passHref>

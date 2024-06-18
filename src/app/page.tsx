@@ -22,7 +22,7 @@ import useApi from "@/hooks/useApi";
 export default function Home() {
   const [newPostOpen, _, setNewPostClose, setNewPostOpen] = useToggle();
   const theme = useTheme();
-  const { data } = useSession();
+  const { data, status } = useSession();
   const { data: posts, error, loading } = useApi<Post[]>("/posts/all");
 
   return (
@@ -46,7 +46,7 @@ export default function Home() {
           >
             Publicaciones
           </Typography>
-          {data && (
+          {status === "authenticated" && (
             <Button
               variant="contained"
               color="primary"
@@ -63,7 +63,7 @@ export default function Home() {
         </PostsContainer>
       </Container>
 
-      {data && (
+      {status === "authenticated" && (
         <Fab
           color="primary"
           aria-label="add"

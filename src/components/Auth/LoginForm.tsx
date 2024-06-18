@@ -45,7 +45,6 @@ export default function LoginForm() {
 
       if (result?.error) {
         helpers.setSubmitting(false);
-        console.log(result.error);
         const error = JSON.parse(result.error);
         const errors = error.errors;
         if (!errors) {
